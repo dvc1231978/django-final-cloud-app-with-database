@@ -121,6 +121,9 @@ class Question(models.Model):
 class Choice(models.Model):
     question = models.ForeignKey(Question, on_delete=models.CASCADE)
     content = models.TextField()
+    is_correct = models.BooleanField()
+    def __str__(self):
+       return self.content     
 
      # <HINT> A sample model method to calculate if learner get the score of the question
     def is_get_score(self, selected_ids):
@@ -130,6 +133,8 @@ class Choice(models.Model):
             return True
         else:
             return False
+    def __str__(self):
+        return self.question        
 
 # <HINT> The submission model
 # One enrollment could have multiple submission
