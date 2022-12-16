@@ -103,29 +103,12 @@ class Enrollment(models.Model):
     # Other fields and methods you would like to design
 class Question(models.Model):
     # Foreign key to lesson
+    lesson_id = models.ForeignKey(Lesson, on_delete=models.CASCADE)
     # question text
+    question_text = models.TextField()
     # question grade/mark
-    course = models.ForeignKey(Course, on_delete=models.CASCADE)
-    content = models.TextField()
     grade = models.IntegerField()
-
-   
-
-
-#  <HINT> Create a Choice Model with:
-    # Used to persist choice content for a question
-    # One-To-Many (or Many-To-Many if you want to reuse choices) relationship with Question
-    # Choice content
-    # Indicate if this choice of the question is a correct one or not
-    # Other fields and methods you would like to design
-class Choice(models.Model):
-    question = models.ForeignKey(Question, on_delete=models.CASCADE)
-    content = models.TextField()
-    is_correct = models.BooleanField()
-    def __str__(self):
-       return self.content     
-
-     # <HINT> A sample model method to calculate if learner get the score of the question
+    # <HINT> A sample model method to calculate if learner get the score of the question
     def is_get_score(self, selected_ids):
         all_answers = self.choice_set.filter(is_correct=True).count()
         selected_correct = self.choice_set.filter(is_correct=True, id__in=selected_ids).count()
@@ -134,7 +117,20 @@ class Choice(models.Model):
         else:
             return False
     def __str__(self):
-        return self.question        
+        return self.question_text 
+
+#  <HINT> Create a Choice Model with:
+    # Used to persist choice content for a question
+    # One-To-Many (or Many-To-Many if you want to reuse choices) relationship with Question
+    # Choice content
+    # Indicate if this choice of the question is a correct one or not
+    # Other fields and methods you would like to design
+class Choice(models.Model):
+    question_id = models.ForeignKey(Question, on_delete=models.CASCADE)
+    choice_text = models.TextField()
+    is_correct = models.BooleanField()
+    def __str__(self):
+        return self.choice_text
 
 # <HINT> The submission model
 # One enrollment could have multiple submission
